@@ -2,14 +2,19 @@ pluginManagement {
     repositories {
         gradlePluginPortal()
         google()
-        mavenCentral()
+//        mavenCentral()
+        maven { url "https://maven.google.com" }
+        jcenter()
     }
 }
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
-        mavenCentral()
+//        mavenCentral()
+        jcenter()
+        maven { url "https://maven.google.com" }
+        maven { url "https://jitpack.io" }
     }
 }
 rootProject.name = "App-Android-Ecommerce"
