@@ -3,8 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/administrator/AndroidStudioProjects/AppAndroidEcommerce/app/src/main/res/font/old_standard_tt.xml" value="0.15625" />
         <entry key="..\:/Users/administrator/AndroidStudioProjects/AppAndroidEcommerce/app/src/main/res/layout/activity_login.xml" value="0.25815217391304346" />
         <entry key="..\:/Users/administrator/AndroidStudioProjects/AppAndroidEcommerce/app/src/main/res/layout/activity_main.xml" value="0.25815217391304346" />
+        <entry key="..\:/Users/administrator/AndroidStudioProjects/AppAndroidEcommerce/app/src/main/res/layout/activity_registrar.xml" value="0.1" />
       </map>
     </option>
   </component>
