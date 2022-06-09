@@ -3,6 +3,8 @@ package br.com.app_android_ecommerce;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -21,19 +23,30 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
+import br.com.app_android_ecommerce.adapters.ItemAdapter;
+import br.com.app_android_ecommerce.adapters.ItemCategoriaAdapter;
 import br.com.app_android_ecommerce.fragments.BottomSheetNavigationFragmento;
+import br.com.app_android_ecommerce.interfaces.ClickListenerItemCategoria;
+import br.com.app_android_ecommerce.item.Categorias;
+import br.com.app_android_ecommerce.model.Item;
+import br.com.app_android_ecommerce.model.ItemCategoria;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "TAG";
     private Toolbar toolbar;
     private RecyclerView recyclerViewItens;
-    private RecyclerView recyclerViewCategorias;
+    private RecyclerView recyclerViewItemCategorias;
     private SwipeRefreshLayout puxeParaAtualizar;
 
     private FirebaseFirestore db;
 
     private ProgressBar progressBar;
+
+    private ArrayList<Item> itensLista = new ArrayList<Item>();
+    private ItemAdapter itemAdapter;
+    private ArrayList<ItemCategoria> itemCategoriaLista = new ArrayList<>();
+    private ItemCategoriaAdapter itemCategoriaAdapter;
 
     private BottomAppBar bottomAppBar;
 
@@ -43,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerViewBuscar;
 
     private SearchView telaPesquisa;
+
+    public static String categoria = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,19 +70,40 @@ public class MainActivity extends AppCompatActivity {
         progressBar.setVisibility(View.GONE);
 
         recyclerViewItens = findViewById(R.id.HomeActivityItemsList);
-        recyclerViewCategorias = findViewById(R.id.HomeActivityItemCategoriesList);
+        recyclerViewItemCategorias = findViewById(R.id.HomeActivityItemCategoriesList);
 
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(null);
         getSupportActionBar().setSubtitle(null);
 
-        // exbit itens
+        // Context context
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext(),
+                LinearLayoutManager.HORIZONTAL, false);
+
+        recyclerViewItemCategorias.setLayoutManager(linearLayoutManager);
+        recyclerViewItemCategorias.setHasFixedSize(true);
+        exibirCategorias();
+
+        // mostrar 2 itens no layout de grade
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
+
+        recyclerViewItens.setLayoutManager(gridLayoutManager);
+        recyclerViewItens.setNestedScrollingEnabled(false);
+
+
+        // exbir itens
         puxeParaAtualizar = findViewById(R.id.MainItemPullToRefresh);
         puxeParaAtualizar.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                itemAdapter = null;
+                itensLista = new ArrayList<>();
 
+                GridLayoutManager gridLayoutManager1 = new GridLayoutManager(getApplicationContext(), 2);
+
+                recyclerViewItens.setLayoutManager(gridLayoutManager1);
+                recyclerViewItens.setNestedScrollingEnabled(false);
                 puxeParaAtualizar.setRefreshing(false);
             }
         });
@@ -87,6 +123,60 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    private void exibirCategorias() {
+        itemCategoriaLista = new ArrayList<>();
+        ArrayList<String> catLista = new Categorias().getItemCategoriaLista();
+
+        for(int index = 0; index < catLista.size(); index++) {
+            String catNome = catLista.get(index);
+
+            ArrayList<String> catValor = new Categorias().getItemCategoriaResource(catNome);
+
+            int drawImg = getResources().getIdentifier(catValor.get(0), "drawable", "br.com.app_android_ecommerce");
+            int corRes = getResources().getIdentifier(catValor.get(1), "color", "br.com.app_android_ecommerce");
+
+            ItemCategoria ic = new ItemCategoria(catNome, drawImg, corRes);
+            itemCategoriaLista.add(ic);
+        }
+        if (itemCategoriaAdapter == null) {
+            // alterado a ordem.
+            itemCategoriaAdapter = new ItemCategoriaAdapter(MainActivity.this, itemCategoriaLista, new ClickListenerItemCategoria() {
+                            @Override
+                            public void onClick(View view, ItemCategoria itemCategoria) {
+                                if (categoria == itemCategoria.getCategoriaNome()) {
+                                    Log.v("categoria", "unselect:" + categoria);
+                                    categoria = "";
+                                    puxeParaAtualizar.setEnabled(true);
+                                    recyclerViewBuscar.setVisibility(View.GONE);
+                                    recyclerViewItens.setVisibility(View.VISIBLE);
+                                } else {
+                                    categoria = itemCategoria.getCategoriaNome();
+                                    Log.v("categoria", "select: " + categoria);
+
+                                    recyclerViewItens.setVisibility(View.GONE);
+                                    progressBar.setVisibility(View.VISIBLE);
+
+                                    puxeParaAtualizar.setEnabled(false);
+
+                                }
+                                itemAdapter = null;
+                                itensLista = new ArrayList<>();
+
+                                GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
+
+                                recyclerViewItens.setLayoutManager(gridLayoutManager);
+                                recyclerViewItens.setNestedScrollingEnabled(false);
+
+                            }
+                        });
+                        recyclerViewItemCategorias.setAdapter(itemCategoriaAdapter);
+        } else {
+            itemCategoriaAdapter.getItensCategorias().clear();
+            itemCategoriaAdapter.getItensCategorias().addAll(itemCategoriaLista);
+            itemCategoriaAdapter.notifyDataSetChanged();
+        }
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

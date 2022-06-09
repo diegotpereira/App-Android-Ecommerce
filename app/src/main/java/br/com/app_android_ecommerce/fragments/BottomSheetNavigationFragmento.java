@@ -2,10 +2,12 @@ package br.com.app_android_ecommerce.fragments;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -14,8 +16,16 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.navigation.NavigationView;
 
 import br.com.app_android_ecommerce.R;
+import br.com.app_android_ecommerce.item.AddItemActivity;
+import br.com.app_android_ecommerce.user.PerfilActivity;
 
 public class BottomSheetNavigationFragmento extends BottomSheetDialogFragment {
+
+    Intent intent = new Intent();
+
+    private String paylpalID = "";
+    private String latitude = "";
+    private String longitude = "";
 
     public BottomSheetNavigationFragmento() {
         // Required empty public constructor
@@ -66,9 +76,22 @@ public class BottomSheetNavigationFragmento extends BottomSheetDialogFragment {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.nav01:
+
                         break;
 
                     case R.id.nav02:
+                        intent = new Intent(getActivity(), AddItemActivity.class);
+                        startActivity(intent);
+
+//                        if (paylpalID.equals("") || latitude.equals("") || longitude.equals("")) {
+//
+//                            Toast.makeText(getContext(), "Defina o ID e o endereço do Paypal no perfil do usuário antes de adicionar o item", Toast.LENGTH_SHORT).show();
+//                            intent = new Intent(getActivity(), PerfilActivity.class);
+//                            startActivity(intent);
+//                        } else {
+//                            intent = new Intent(getActivity(), AddItemActivity.class);
+//                            startActivity(intent);
+//                        }
                         break;
 
                     case R.id.nav03:

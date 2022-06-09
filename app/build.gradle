@@ -49,6 +49,11 @@ dependencies {
     implementation 'com.github.medyo:fancybuttons:1.9.1'
     implementation 'de.hdodenhof:circleimageview:3.0.0'
 
+    implementation 'com.github.smarteist:autoimageslider:1.2.0'
+
+    implementation 'com.github.bumptech.glide:glide:4.13.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.13.0'
+
     // Google Apis
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
 
@@ -58,4 +63,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:21.0.5'
 
     implementation 'com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava'
+
+    //Imagem download
+    implementation 'com.squareup.picasso:picasso:2.71828'
 }
