@@ -26,13 +26,13 @@
             android:name=".item.AddItemActivity"
             android:exported="false" />
         <activity
-            android:name=".user.LoginActivity"
+            android:name=".MainActivity"
             android:exported="false" />
         <activity
             android:name=".user.Registrar"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".user.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
