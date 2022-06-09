@@ -21,6 +21,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
+import br.com.app_android_ecommerce.fragments.BottomSheetNavigationFragmento;
+
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "TAG";
@@ -33,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ProgressBar progressBar;
 
-//    private BottomAppBar bottomAppBar;
+    private BottomAppBar bottomAppBar;
 
 //    private FloatingActionButton fabChat;
 //    private FloatingActionButton fabCarrinho;
@@ -46,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        setarBottomAppBar();
+        setarBottomAppBar();
 
         toolbar = findViewById(R.id.toolbar);
         progressBar = (ProgressBar) findViewById(R.id.searchProgressBar);
@@ -116,16 +118,18 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
     // definir BottomAppBar
-//    private void setarBottomAppBar() {
-//        bottomAppBar = findViewById(R.id.bar);
-//
-//        setSupportActionBar(bottomAppBar);
-//
-//        bottomAppBar.setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//            }
-//        });
-//    }
+    private void setarBottomAppBar() {
+        bottomAppBar = findViewById(R.id.bar);
+
+        setSupportActionBar(bottomAppBar);
+
+        bottomAppBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // abrir botao sheet
+                BottomSheetNavigationFragmento bottomSheetNavigationFragmento = BottomSheetNavigationFragmento.newInstance();
+                bottomSheetNavigationFragmento.show(getSupportFragmentManager(), "Fragmento da caixa de diálogo da folha inferior");
+            }
+        });
+    }
 }
