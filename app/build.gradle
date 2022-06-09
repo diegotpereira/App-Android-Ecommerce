@@ -47,6 +47,7 @@ dependencies {
 
     // pacotes extras
     implementation 'com.github.medyo:fancybuttons:1.9.1'
+    implementation 'de.hdodenhof:circleimageview:3.0.0'
 
     // Google Apis
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
