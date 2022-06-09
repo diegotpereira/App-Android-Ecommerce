@@ -37,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
 
     private BottomAppBar bottomAppBar;
 
-//    private FloatingActionButton fabChat;
-//    private FloatingActionButton fabCarrinho;
+    private FloatingActionButton fabChat;
+    private FloatingActionButton fabCarrinho;
 
     private RecyclerView recyclerViewBuscar;
 
@@ -71,7 +71,21 @@ public class MainActivity extends AppCompatActivity {
                 puxeParaAtualizar.setRefreshing(false);
             }
         });
+        fabChat = findViewById(R.id.fabChat);
+        fabCarrinho = findViewById(R.id.fabCarrinho);
 
+        fabChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        fabCarrinho.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
     @Override
