@@ -4,9 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -22,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private RecyclerView recyclerViewItens;
     private RecyclerView recyclerViewCategorias;
+    private SwipeRefreshLayout puxeParaAtualizar;
 
     private FirebaseFirestore db;
 
@@ -34,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerViewBuscar;
 
-    private SearchView searchView;
+    private SearchView telaPesquisa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +60,59 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(null);
         getSupportActionBar().setSubtitle(null);
 
+        // exbit itens
+        puxeParaAtualizar = findViewById(R.id.MainItemPullToRefresh);
+        puxeParaAtualizar.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                puxeParaAtualizar.setRefreshing(false);
+            }
+        });
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_principal, menu);
+
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_pesquisar, menu);
+
+        final MenuItem item = menu.findItem(R.id.menuSearch);
+        telaPesquisa = (SearchView) item.getActionView();
+        SearchView telaPesquisa = (SearchView) item.getActionView();
+
+        Intent intent = getIntent();
+
+        telaPesquisa.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                recyclerViewItens.setVisibility(View.GONE);
+                puxeParaAtualizar.setEnabled(false);
+                progressBar.setVisibility(View.VISIBLE);
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String novoTexto) {
+                Log.i("novoTexto", novoTexto);
+                return false;
+            }
+        });
+        telaPesquisa.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                recyclerViewItens.setVisibility(View.VISIBLE);
+
+                if (recyclerViewBuscar != null)
+                    recyclerViewBuscar.setVisibility(View.GONE);
+                puxeParaAtualizar.setEnabled(true);
+                return false;
+            }
+        });
+
         return super.onCreateOptionsMenu(menu);
     }
     // definir BottomAppBar
