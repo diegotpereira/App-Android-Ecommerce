@@ -3,6 +3,7 @@ package br.com.app_android_ecommerce;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -28,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String TAG = "TAG";
     private Toolbar toolbar;
     private RecyclerView recyclerViewItens;
-    private RecyclerView recyclerViewCategorias;
+    private RecyclerView recyclerViewItemCategorias;
     private SwipeRefreshLayout puxeParaAtualizar;
 
     private FirebaseFirestore db;
@@ -44,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
 
     private SearchView telaPesquisa;
 
+    public static String categoria = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,14 +58,22 @@ public class MainActivity extends AppCompatActivity {
         progressBar.setVisibility(View.GONE);
 
         recyclerViewItens = findViewById(R.id.HomeActivityItemsList);
-        recyclerViewCategorias = findViewById(R.id.HomeActivityItemCategoriesList);
+        recyclerViewItemCategorias = findViewById(R.id.HomeActivityItemCategoriesList);
 
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(null);
         getSupportActionBar().setSubtitle(null);
 
-        // exbit itens
+        // Context context
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext(),
+                LinearLayoutManager.HORIZONTAL, false);
+
+        recyclerViewItemCategorias.setLayoutManager(linearLayoutManager);
+        recyclerViewItemCategorias.setHasFixedSize(true);
+        exibirCategorias();
+
+        // exbir itens
         puxeParaAtualizar = findViewById(R.id.MainItemPullToRefresh);
         puxeParaAtualizar.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -86,6 +97,9 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+    private void exibirCategorias() {
+
     }
 
     @Override
