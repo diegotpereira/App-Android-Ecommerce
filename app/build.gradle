@@ -35,7 +35,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
 
-    implementation 'com.google.firebase:firebase-auth:16.0.5'
+//    implementation 'com.google.firebase:firebase-auth:16.0.5'
     implementation 'com.paypal.sdk:paypal-android-sdk:2.16.0'
     implementation 'com.google.firebase:firebase-firestore:21.4.2'
     implementation 'com.google.firebase:firebase-storage:19.1.1'
@@ -54,7 +54,7 @@ dependencies {
 
     // Facebook Login Api
     implementation 'com.facebook.android:facebook-login:[5,6)'
-    implementation 'com.google.firebase:firebase-auth:19.3.0'
+    implementation 'com.google.firebase:firebase-auth:21.0.5'
 
     implementation 'com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava'
 }
