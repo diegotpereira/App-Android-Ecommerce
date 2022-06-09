@@ -34,7 +34,6 @@ import mehdi.sakout.fancybuttons.FancyButton;
 public class Registrar extends AppCompatActivity {
 
     private EditText registrarNome;
-    private FancyButton registrarCadastroBtn;
     private EditText registrarSobrenome;
     private EditText registrarEmail;
     private EditText registrarSenha;
@@ -56,7 +55,7 @@ public class Registrar extends AppCompatActivity {
         registrarEmail = findViewById(R.id.registrar_email);
         registrarSenha = findViewById(R.id.registrar_senha);
 
-        registrarCadastroBtn = findViewById(R.id.registrar_cadastro_btn);
+        FancyButton registrarCadastroBtn = findViewById(R.id.registrar_cadastro_btn);
 
         registrarCadastreLogin = findViewById(R.id.registrar_cadastro_login);
         registrarProgressBar = findViewById(R.id.registrar_progress_bar);
@@ -99,7 +98,7 @@ public class Registrar extends AppCompatActivity {
                 }
                 registrarProgressBar.setVisibility(View.VISIBLE);
 
-                auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
@@ -107,19 +106,19 @@ public class Registrar extends AppCompatActivity {
 
                             DocumentReference documentReference = db.collection("usuarios").document(uID);
 
-                            Map<String, Object> usuario = new HashMap<>();
-                            usuario.put("nome", nome);
-                            usuario.put("sobrenome", sobrenome);
-                            usuario.put("email", email);
-                            usuario.put("password", password);
-                            usuario.put("paypalid", "");
-                            usuario.put("endereco", "");
-                            usuario.put("apt", "");
-                            usuario.put("telefone", "");
-                            usuario.put("latitude", "");
-                            usuario.put("longitude", "");
+                            Map<String, Object> user = new HashMap<>();
+                            user.put("nome", nome);
+                            user.put("sobrenome", sobrenome);
+                            user.put("email", email);
+                            user.put("password", password);
+//                            usuario.put("paypalid", "");
+//                            usuario.put("endereco", "");
+//                            usuario.put("apt", "");
+//                            usuario.put("telefone", "");
+//                            usuario.put("latitude", "");
+//                            usuario.put("longitude", "");
 
-                            documentReference.set(usuario).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
                                     Log.d(TAG, "onSuccess: O perfil do usuário é criado para " + uID );
