@@ -36,6 +36,7 @@ import java.util.Iterator;
 import br.com.app_android_ecommerce.MainActivity;
 import br.com.app_android_ecommerce.R;
 import br.com.app_android_ecommerce.model.Item;
+import br.com.app_android_ecommerce.utils.CalcularDistancia;
 import br.com.app_android_ecommerce.utils.Singleton;
 import br.com.app_android_ecommerce.utils.UtilitariosData;
 import mehdi.sakout.fancybuttons.FancyButton;
@@ -119,12 +120,13 @@ public class ItemActivity extends AppCompatActivity {
         vendedorEndereco = findViewById(R.id.itemVendedorEndereco);
 
         exibirAddNoCarrinho = findViewById(R.id.itemNoCarrinho);
-        sliderLayout = findViewById(R.id.ItemImage);
+        sliderLayout = findViewById(R.id.ItemImagem);
         sliderLayout.setScrollTimeInSec(4);
 
         exibirItemNome.setText(itemNome);
         exibirItemDescricao.setText(itemDescricao);
         exibirItemPreco.setText("R$" + itemPreco);
+
 
         requisitaRermissao();
         if (ActivityCompat.checkSelfPermission(ItemActivity.this, ACCESS_FINE_LOCATION) ==
@@ -138,8 +140,8 @@ public class ItemActivity extends AppCompatActivity {
                         double usuarioLon = location.getLongitude();
                         double itemLat = Double.parseDouble(itemLatitude);
                         double itemLon = Double.parseDouble(itemLongitude);
-//                        double distancia = new CalcularDistancia().distancia(usuarioLat, usuarioLon, itemLat, itemLon, 'M');
-
+                        double distancia = new CalcularDistancia().distancia(usuarioLat, usuarioLon, itemLat, itemLon, 'M');
+                        itemVendedoDistancia.setText(String.format("%.1f", distancia) + " milhas da localização atual");
                     }
                 }
             });
