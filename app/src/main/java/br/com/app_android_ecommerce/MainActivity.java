@@ -39,6 +39,7 @@ import br.com.app_android_ecommerce.item.Categorias;
 import br.com.app_android_ecommerce.item.ItemActivity;
 import br.com.app_android_ecommerce.model.Item;
 import br.com.app_android_ecommerce.model.ItemCategoria;
+import br.com.app_android_ecommerce.utils.Singleton;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -68,8 +69,13 @@ public class MainActivity extends AppCompatActivity {
 
     public static String categoria = "";
 
-    private double usuarioLat;
-    private double usuarioLon;
+    private static int precoMin = 0;
+    private static int precoMax = 2000;
+
+    private double usuarioLat = 0;
+    private double usuarioLon = 0;
+    private double usuarioMilhas = 25;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +89,8 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerViewItens = findViewById(R.id.HomeActivityItemsList);
         recyclerViewItemCategorias = findViewById(R.id.HomeActivityItemCategoriesList);
+
+        db = Singleton.getDb();
 
 
         setSupportActionBar(toolbar);
@@ -201,30 +209,43 @@ public class MainActivity extends AppCompatActivity {
                         ArrayList<String> imgs = new ArrayList<>();
                         Map<String, Object> meuMapa = documentSnapshot.getData();
 
-                        String itemLat = (String) meuMapa.get("itemLatitude");
-                        String itemLon = (String) meuMapa.get("itemLongitude");
-                        String itemEnd = (String) meuMapa.get("itemEndereco");
-                        String itemCat = (String) meuMapa.get("itemCategoria");
+                        String itemLatitude = (String) meuMapa.get("itemLatitude");
+                        String itemLongitude = (String) meuMapa.get("itemLongitude");
+                        String itemEndereco = (String) meuMapa.get("itemEndereco");
+                        String itemCategoria = (String) meuMapa.get("itemCategoria");
                         boolean itemPedido = (boolean) meuMapa.get("itemPedido");
 
-                        double lat = Double.parseDouble(itemLat);
-                        double lon = Double.parseDouble(itemLon);
-                        double curDistancia = 0.0;
+//                        double lat = Double.parseDouble(itemLatitude);
+//                        double lon = Double.parseDouble(itemLongitude);
+//                        double curDistancia = 0.0;
 
+//                        if (usuarioLat != 0 && usuarioLon != 0) {
+//
+//                        }
+//
                         Double preco = 0.0;
-
-                        if (usuarioLat != 0 && usuarioLon != 0) {
-
-                        }
-
-                        for(Map.Entry<String, Object> entry : meuMapa.entrySet()) {
-                            if (entry.getKey().equals("itemImagemLista")) {
-                                for(Object s : (ArrayList) entry.getValue()) {
-                                    imgs.add((String) s);
-                                }
-                                Log.v("TagImg", entry.getValue().toString());
-                            }
-                        }
+//                        Object precoDoDB = meuMapa.get("itemPreco");
+//                        if (precoDoDB.getClass() == Double.class) {
+//                            preco = (Double) meuMapa.get("itemPreco");
+//                        } else if (precoDoDB.getClass() == Long.class) {
+//                            preco = ((Long) meuMapa.get("itemPreco")).doubleValue();
+//                        }
+//                        if (!(boolean) meuMapa.get("itemPedido")
+//                        && curDistancia <= usuarioMilhas
+//                        && (preco >= precoMin && preco <= precoMax)
+//                        && (categoria.equals("") ||
+//                                categoria.equals(itemCategoria) ||
+//                                categoria.equals("Brindes")
+//                        && preco == 0)) {
+//                            for(Map.Entry<String, Object> entry : meuMapa.entrySet()) {
+//                                if (entry.getKey().equals("itemImagemLista")) {
+//                                    for(Object s : (ArrayList) entry.getValue()) {
+//                                        imgs.add((String) s);
+//                                    }
+//                                    Log.v("TagImg", entry.getValue().toString());
+//                                }
+//                            }
+//                        }
                         Item item = new Item();
                         item.setItemID(documentSnapshot.getId());
                         item.setItemVendedorUID((String) meuMapa.get("vendedorUID"));
@@ -232,11 +253,11 @@ public class MainActivity extends AppCompatActivity {
                         item.setItemDescricao((String) meuMapa.get("itemDescricao"));
                         item.setItemPreco(preco.floatValue());
                         item.setItemImagemLista(imgs);
-                        item.setItemEndereco(itemEnd);
-                        item.setItemCategoria(itemCat);
+                        item.setItemEndereco(itemEndereco);
+                        item.setItemCategoria(itemCategoria);
                         item.setItemPedido(itemPedido);
-                        item.setLatitude(itemLat);
-                        item.setLongitude(itemLon);
+                        item.setLatitude(itemLatitude);
+                        item.setLongitude(itemLongitude);
 
                         itensLista.add(item);
                     }

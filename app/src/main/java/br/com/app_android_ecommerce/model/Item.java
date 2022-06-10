@@ -41,10 +41,11 @@ public class Item {
         this.itemImagemLista = itemImagemLista;
     }
 
-    public Item(String itemID, String itemNome, String itemDescricao, float itemPreco, String itemImagem) {
+    public Item(String itemID, String itemNome, String itemDescricao, String itemVendedorUID,float itemPreco, String itemImagem) {
         this.itemID = itemID;
         this.itemNome = itemNome;
         this.itemDescricao = itemDescricao;
+        this.itemVendedorUID = itemVendedorUID;
         this.itemPreco = itemPreco;
         this.itemImagem = itemImagem;
     }

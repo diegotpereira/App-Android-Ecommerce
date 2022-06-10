@@ -61,7 +61,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
-            itemNome = itemView.findViewById(R.id.layout_itens_categoria_texto);
+            itemNome = itemView.findViewById(R.id.layout_itens_texto);
             itemPreco = itemView.findViewById(R.id.layout_itens_preco);
             itemImagem = itemView.findViewById(R.id.layout_itens_imagem);
             itemView.setOnClickListener(this);
@@ -70,9 +70,9 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             this.item = itens;
 
             itemNome.setText(item.getItemNome());
-            itemPreco.setText("$"   +String.format("%.2f", item.getItemPreco()));
+            itemPreco.setText("R$"   +String.format("%.2f", item.getItemPreco()));
 
-            Glide.with(context).load(item.getItemImagemLista().get(0)).into(itemImagem);
+//            Glide.with(context).load(item.getItemImagemLista().get(0)).into(itemImagem);
 
         }
 
