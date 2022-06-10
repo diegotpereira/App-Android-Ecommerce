@@ -48,7 +48,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/ItemName"
+                        android:id="@+id/itemNome"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
@@ -64,7 +64,7 @@
                         android:textStyle="bold" />
 
                     <mehdi.sakout.fancybuttons.FancyButton
-                        android:id="@+id/ItemToCart"
+                        android:id="@+id/itemNoCarrinho"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -83,7 +83,7 @@
                 </RelativeLayout>
 
                 <TextView
-                    android:id="@+id/ItemPrice"
+                    android:id="@+id/itemPreco"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
@@ -93,7 +93,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/ItemDescription"
+                    android:id="@+id/itemDescricao"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
@@ -124,7 +124,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/ItemSellerName"
+                        android:id="@+id/itemVendedorNome"
                         android:layout_width="220dp"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -161,7 +161,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/ItemSellerID"
+                        android:id="@+id/itemVendedorEmail"
                         android:layout_width="220dp"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -198,7 +198,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/ItemSellerPhone"
+                        android:id="@+id/itemVendedorTelefone"
                         android:layout_width="220dp"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -235,7 +235,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/ItemAddedTime"
+                        android:id="@+id/itemAddHora"
                         android:layout_width="220dp"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -271,7 +271,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/ItemSellerAddress"
+                        android:id="@+id/itemVendedorEndereco"
                         android:layout_width="220dp"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -294,7 +294,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/ItemSellerDistanceText"
+                        android:id="@+id/itemVendedoDistanciaTexto"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
@@ -308,7 +308,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/ItemSellerDistance"
+                        android:id="@+id/itemVendedoDistancia"
                         android:layout_width="220dp"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
