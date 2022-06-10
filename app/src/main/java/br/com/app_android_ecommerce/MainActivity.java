@@ -1,5 +1,6 @@
 package br.com.app_android_ecommerce;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
@@ -17,17 +18,25 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import br.com.app_android_ecommerce.adapters.ItemAdapter;
 import br.com.app_android_ecommerce.adapters.ItemCategoriaAdapter;
 import br.com.app_android_ecommerce.fragments.BottomSheetNavigationFragmento;
+import br.com.app_android_ecommerce.interfaces.ArquivoDadoStatus;
+import br.com.app_android_ecommerce.interfaces.ClickListenerItem;
 import br.com.app_android_ecommerce.interfaces.ClickListenerItemCategoria;
 import br.com.app_android_ecommerce.item.Categorias;
+import br.com.app_android_ecommerce.item.ItemActivity;
 import br.com.app_android_ecommerce.model.Item;
 import br.com.app_android_ecommerce.model.ItemCategoria;
 
@@ -59,6 +68,9 @@ public class MainActivity extends AppCompatActivity {
 
     public static String categoria = "";
 
+    private double usuarioLat;
+    private double usuarioLon;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,9 +99,9 @@ public class MainActivity extends AppCompatActivity {
 
         // mostrar 2 itens no layout de grade
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
-
         recyclerViewItens.setLayoutManager(gridLayoutManager);
         recyclerViewItens.setNestedScrollingEnabled(false);
+        exibirItens();
 
 
         // exbir itens
@@ -105,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
                 recyclerViewItens.setLayoutManager(gridLayoutManager1);
                 recyclerViewItens.setNestedScrollingEnabled(false);
                 puxeParaAtualizar.setRefreshing(false);
+                exibirItens();
             }
         });
         fabChat = findViewById(R.id.fabChat);
@@ -166,6 +179,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 recyclerViewItens.setLayoutManager(gridLayoutManager);
                                 recyclerViewItens.setNestedScrollingEnabled(false);
+                                exibirItens();
 
                             }
                         });
@@ -177,6 +191,105 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void getItens(final ArquivoDadoStatus arquivoDadoStatus) {
+        db.collection("ITEMS").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                if (task.isSuccessful()) {
+                    for(QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                        ArrayList<String> imgs = new ArrayList<>();
+                        Map<String, Object> meuMapa = documentSnapshot.getData();
+
+                        String itemLat = (String) meuMapa.get("itemLatitude");
+                        String itemLon = (String) meuMapa.get("itemLongitude");
+                        String itemEnd = (String) meuMapa.get("itemEndereco");
+                        String itemCat = (String) meuMapa.get("itemCategoria");
+                        boolean itemPedido = (boolean) meuMapa.get("itemPedido");
+
+                        double lat = Double.parseDouble(itemLat);
+                        double lon = Double.parseDouble(itemLon);
+                        double curDistancia = 0.0;
+
+                        Double preco = 0.0;
+
+                        if (usuarioLat != 0 && usuarioLon != 0) {
+
+                        }
+
+                        for(Map.Entry<String, Object> entry : meuMapa.entrySet()) {
+                            if (entry.getKey().equals("itemImagemLista")) {
+                                for(Object s : (ArrayList) entry.getValue()) {
+                                    imgs.add((String) s);
+                                }
+                                Log.v("TagImg", entry.getValue().toString());
+                            }
+                        }
+                        Item item = new Item();
+                        item.setItemID(documentSnapshot.getId());
+                        item.setItemVendedorUID((String) meuMapa.get("vendedorUID"));
+                        item.setItemNome((String) meuMapa.get("itemNome"));
+                        item.setItemDescricao((String) meuMapa.get("itemDescricao"));
+                        item.setItemPreco(preco.floatValue());
+                        item.setItemImagemLista(imgs);
+                        item.setItemEndereco(itemEnd);
+                        item.setItemCategoria(itemCat);
+                        item.setItemPedido(itemPedido);
+                        item.setLatitude(itemLat);
+                        item.setLongitude(itemLon);
+
+                        itensLista.add(item);
+                    }
+                    arquivoDadoStatus.comSucesso(itensLista);
+                } else {
+                    arquivoDadoStatus.comErro("Erro em obter dados");
+
+                    Log.w(TAG, "Erro em obter dados.", task.getException());
+                }
+            }
+        });
+    }
+    private void exibirItens() {
+        getItens(new ArquivoDadoStatus() {
+            @Override
+            public void comSucesso(ArrayList lista) {
+                if (itemAdapter == null) {
+                    itemAdapter = new ItemAdapter(MainActivity.this, itensLista, new ClickListenerItem() {
+
+                                            @Override
+                                            public void onClick(View view, Item item) {
+                                                Intent itemPagina = new Intent(MainActivity.this, ItemActivity.class);
+
+                                                itemPagina.putExtra("itemID", item.getItemID());
+                                                itemPagina.putExtra("vendedorUID",item.getItemVendedorUID());
+                                                itemPagina.putExtra("itemNome",item.getItemNome());
+                                                itemPagina.putExtra("itemDescricao", item.getItemDescricao());
+                                                itemPagina.putExtra("itemPreco", item.getItemPreco());
+                                                itemPagina.putExtra("itemImagem", item.getItemImagem());
+                                                itemPagina.putExtra("itemImagemLista", item.getItemImagemLista());
+                                                itemPagina.putExtra("itemEndereco", item.getItemEndereco());
+                                                itemPagina.putExtra("itemCategoria", item.getItemCategoria());
+                                                itemPagina.putExtra("itemPedido", item.isItemPedido());
+                                                itemPagina.putExtra("itemLatitude", item.getLatitude());
+                                                itemPagina.putExtra("itemLongitude", item.getLongitude());
+
+                                                startActivity(itemPagina);
+                                            }
+                                        });
+                    recyclerViewItens.setAdapter(itemAdapter);
+                } else {
+                    itemAdapter.getItens().clear();
+                    itemAdapter.getItens().addAll(itensLista);
+                    itemAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void comErro(String e) {
+
+            }
+        });
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

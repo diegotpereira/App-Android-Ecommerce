@@ -1,6 +1,7 @@
 package br.com.app_android_ecommerce.adapters;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -23,20 +24,32 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     private ArrayList<Item> itens;
     private ClickListenerItem itemClickListener;
 
+    public ItemAdapter(Context context, ArrayList<Item> itens, ClickListenerItem itemClickListener) {
+        this.context = context;
+        this.itens = itens;
+        this.itemClickListener = itemClickListener;
+    }
+
     @NonNull
     @Override
-    public ItemAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_itens_lista, parent, false);
+
+        return new ViewHolder(v);
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull ItemAdapter.ViewHolder holder, int position) {
-
+    public ArrayList<Item> getItens() {
+        return itens;
     }
 
-    @Override
     public int getItemCount() {
-        return 0;
+        return itens.size();
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        holder.bindModel(itens.get(position));
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{

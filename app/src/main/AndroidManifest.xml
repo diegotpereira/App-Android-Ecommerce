@@ -20,6 +20,9 @@
         android:theme="@style/AppTheme"
         tools:targetApi="31">
         <activity
+            android:name=".ItemActivity"
+            android:exported="false" />
+        <activity
             android:name=".user.PerfilActivity"
             android:exported="false" />
         <activity
