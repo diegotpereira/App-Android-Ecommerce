@@ -4,16 +4,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.model.LatLng;
@@ -34,12 +38,14 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import br.com.app_android_ecommerce.R;
+import br.com.app_android_ecommerce.interfaces.ArquivoDadoImagemStatus;
 import br.com.app_android_ecommerce.utils.Singleton;
 
 public class PerfilActivity extends AppCompatActivity {
@@ -246,4 +252,43 @@ public class PerfilActivity extends AppCompatActivity {
             return null;
         }
     }
+    public void atualizarPerfilImagemClick(View view) {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intent, PEGA_IMAGEM_CODIGO);
+        }
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == SELECIONAR_IMAGEM && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            caminhoArquivo = data.getData();
+
+
+        }
+    }
+    private void atualizarImagem(final ArquivoDadoImagemStatus arquivoDadoImagemStatus) {
+        if (caminhoArquivo != null) {
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("enviando a imagem...");
+            progressDialog.show();
+
+            final  StorageReference reference = storageReference.child("perfilImagens/" + logandoComUsuario.getUid());
+
+            reference.putFile(caminhoArquivo)
+            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    progressDialog.dismiss();
+
+                    Log.v("atualizarPerfilImagem", reference.getDownloadUrl().toString());
+
+                    UploadTask uploadTask = reference.putFile(caminhoArquivo);
+                }
+            });
+        }
+    }
+
 }
